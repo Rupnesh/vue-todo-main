@@ -1,28 +1,22 @@
 <template>
   <div id="app">
     <h3>To Do app</h3>
-    <p>Available Task {{tasksLength}}</p>
-    <ToDo msg="Welcome to Your Vue.js App" @showTasksCount="handleCustom"/>
+    <p>Available Task {{taskCount}}</p>
+    <ToDo/>
   </div>
 </template>
 
 <script>
 import ToDo from './components/ToDo.vue'
+import { mapState } from 'vuex';
 export default {
   name: 'App',
   components: {
     ToDo
   },
-  data() {
-    return {
-      tasksLength: 0,
-    }
-  },
-  methods: {
-    handleCustom(tasks) {
-      this.tasksLength = tasks;
-    }
-  },
+  computed: mapState({
+    taskCount: state => state.tasks.length
+  })
 }
 </script>
 

@@ -26,29 +26,27 @@
 <script>
 import TableHeader from './TableHeader.vue'
 import TableData from './TableData.vue'
+import store from '../store';
+import * as type from '../storeTypes';
+import { mapState } from 'vuex';
 export default {
 	name: 'TaskList',
-	props: {tasks: Array},
 	components: {TableHeader,TableData},
 	mounted() {
 	},
-	data() {
-		return {
-			availabelStatus: ['to-do', 'in-progress','finished'],
-		}
-	},
+	computed: mapState({
+    tasks: state => state.tasks
+  }),
 	methods: {
 		handleRemoveTask(index) {
-			this.tasks.splice(index,1)
+			store.dispatch({ type: type.Remove, index })
 		},
-		handleUpdateTask(index, data) {
-			console.log("updates....",index, ' ',data)
-			this.tasks[index].task = data;
+		handleUpdateTask(index, task) {
+			const data = {"index": index, "task": task}
+			store.dispatch({ type: type.Update, data })
 		},
 		handleUpdateStatus(index) {
-      const indexObject = {"index": 0}
-      indexObject.index = this.availabelStatus.indexOf(this.tasks[index].status) + 1;
-      this.tasks[index].status = this.availabelStatus[indexObject.index > 2 ? indexObject.index = 0 : indexObject.index];
+			store.dispatch({ type: type.UpdateStatus, index })
 			this.tasks.map((item) => item.edit = false)
     },
 	}
